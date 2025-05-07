@@ -111,6 +111,7 @@
   </div>
 
   <script>
+    // Substitua com o URL do seu Apps Script
     const API_URL = "https://script.google.com/macros/s/AKfycbyLm9Ce0Zvv4tyHE_ebkek9CU4EXwEcvWQX4nKYpdkQnn2tjcR9DG1_JdzKW-eYN16D/exec";
 
     async function carregarComidas() {
@@ -152,10 +153,11 @@
         await fetch(API_URL, {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/x-www-form-urlencoded'
           },
-          body: JSON.stringify({
-            data: [{ nome, comida }]
+          body: new URLSearchParams({
+            nome: nome,
+            comida: comida
           })
         });
 
