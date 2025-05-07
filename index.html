@@ -2,79 +2,85 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Lista de Comidas Típicas</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Comidas para a Festa</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
       font-family: 'Inter', sans-serif;
       background: url('bg.png') no-repeat center center fixed;
       background-size: cover;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
     }
 
-    .logo-container {
-      text-align: center;
-      margin-top: 40px;
-    }
-
-    .logo-container img {
-      width: 180px;
-    }
-
-    .container {
-      max-width: 600px;
-      margin: 20px auto;
-      padding: 20px;
-    }
-
-    .box {
-      background: rgba(255, 255, 255, 0.95);
-      padding: 25px 30px;
-      margin-bottom: 30px;
-      border-radius: 16px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    }
-
-    h2 {
-      font-size: 22px;
-      text-align: center;
+    .logo {
+      width: 300px;
+      max-width: 90%;
+      height: auto;
       margin-bottom: 20px;
     }
 
-    ul {
-      list-style: none;
-      padding-left: 0;
-      margin-bottom: 0;
+    h1 {
+      font-size: 24px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 20px;
+      text-align: center;
     }
 
-    li {
-      background: #f3f3f3;
-      margin-bottom: 10px;
-      padding: 10px 15px;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    input, button {
+    .box {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+      padding: 20px;
       width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      font-size: 16px;
-      border: none;
+      max-width: 500px;
+      margin-bottom: 20px;
+    }
+
+    .box ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .box ul li {
+      background: #f9f9f9;
+      margin: 8px 0;
+      padding: 10px;
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
-    input {
-      background-color: #fff;
+    label {
+      display: block;
+      font-weight: 600;
+      margin-top: 10px;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      margin-bottom: 10px;
     }
 
     button {
       background-color: #4CAF50;
       color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
       cursor: pointer;
-      font-weight: 600;
+      font-size: 16px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
       transition: background 0.3s;
     }
 
@@ -83,29 +89,25 @@
     }
   </style>
 </head>
-<body onload="carregarComidas()">
-  <div class="logo-container">
-    <img src="top-logo.png" alt="Logo do Evento">
+<body>
+  <img src="top-logo.png" alt="Logo" class="logo">
+
+  <div class="box">
+    <h1>Comidas que cada pessoa levará</h1>
+    <ul id="lista-comidas"></ul>
   </div>
 
-  <div class="container">
-    <!-- Listagem -->
-    <div class="box">
-      <h2>Comidas que cada pessoa levará</h2>
-      <ul id="lista-comidas">
-        <li>Carregando...</li>
-      </ul>
-    </div>
+  <div class="box">
+    <h1>Coloque seu nome + a comida típica que irá levar para a festa</h1>
+    <form id="formulario">
+      <label for="nome">Seu nome:</label>
+      <input type="text" id="nome" name="nome" required />
 
-    <!-- Formulário -->
-    <div class="box">
-      <h2>Coloque seu nome + a comida típica que irá levar para a festa</h2>
-      <form id="formulario">
-        <input type="text" id="nome" name="nome" placeholder="Seu nome" required />
-        <input type="text" id="comida" name="comida" placeholder="Comida típica que irá levar" required />
-        <button type="submit">Enviar</button>
-      </form>
-    </div>
+      <label for="comida">Comida típica:</label>
+      <input type="text" id="comida" name="comida" required />
+
+      <button type="submit">Enviar</button>
+    </form>
   </div>
 
   <script>
@@ -149,12 +151,8 @@
       try {
         await fetch(API_URL, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            data: [{ nome, comida }]
-          })
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ data: [{ nome, comida }] })
         });
 
         alert("Comida enviada com sucesso!");
@@ -164,10 +162,9 @@
         alert("Erro ao enviar. Tente novamente.");
       }
     });
-  </script>
-  <script>
-    // Recarrega a lista a cada 10 segundos
+
     setInterval(carregarComidas, 10000);
+    window.onload = carregarComidas;
   </script>
 </body>
 </html>
