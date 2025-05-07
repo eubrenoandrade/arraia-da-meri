@@ -13,33 +13,39 @@
       background-size: cover;
     }
 
+    .logo-container {
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    .logo-container img {
+      width: 180px;
+    }
+
     .container {
       max-width: 600px;
-      margin: 80px auto;
+      margin: 20px auto;
+      padding: 20px;
+    }
+
+    .box {
       background: rgba(255, 255, 255, 0.95);
-      padding: 30px;
+      padding: 25px 30px;
+      margin-bottom: 30px;
       border-radius: 16px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
     }
 
-    header {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    header img {
-      width: 180px;
-    }
-
     h2 {
       font-size: 22px;
-      margin-top: 30px;
+      text-align: center;
+      margin-bottom: 20px;
     }
 
     ul {
       list-style: none;
       padding-left: 0;
-      margin-bottom: 30px;
+      margin-bottom: 0;
     }
 
     li {
@@ -78,21 +84,28 @@
   </style>
 </head>
 <body onload="carregarComidas()">
+  <div class="logo-container">
+    <img src="top-logo.png" alt="Logo do Evento">
+  </div>
+
   <div class="container">
-    <header>
-      <img src="top-logo.png" alt="Logo do Evento">
+    <!-- Listagem -->
+    <div class="box">
       <h2>Comidas que cada pessoa levará</h2>
-    </header>
+      <ul id="lista-comidas">
+        <li>Carregando...</li>
+      </ul>
+    </div>
 
-    <ul id="lista-comidas">
-      <li>Carregando...</li>
-    </ul>
-
-    <form id="formulario">
-      <input type="text" id="nome" name="nome" placeholder="Seu nome" required />
-      <input type="text" id="comida" name="comida" placeholder="Comida típica que irá levar" required />
-      <button type="submit">Enviar</button>
-    </form>
+    <!-- Formulário -->
+    <div class="box">
+      <h2>Coloque seu nome + a comida típica que irá levar para a festa</h2>
+      <form id="formulario">
+        <input type="text" id="nome" name="nome" placeholder="Seu nome" required />
+        <input type="text" id="comida" name="comida" placeholder="Comida típica que irá levar" required />
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
   </div>
 
   <script>
