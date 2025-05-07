@@ -19,7 +19,7 @@
     }
 
     .logo-container img {
-      width: 300px;
+      width: 300px; /* Tamanho aumentado */
     }
 
     .container {
@@ -57,6 +57,7 @@
     }
 
     input, button {
+      display: block;
       width: 100%;
       padding: 12px;
       margin: 10px 0;
@@ -64,6 +65,7 @@
       border: none;
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      box-sizing: border-box; /* Garante que padding/border não aumentem largura */
     }
 
     input {
@@ -165,7 +167,7 @@
       }
     });
 
-    // Recarrega a lista a cada 10 segundos
+    // Recarrega automaticamente a lista a cada 10 segundos
     setInterval(carregarComidas, 10000);
   </script>
 </body>
