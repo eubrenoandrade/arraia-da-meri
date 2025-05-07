@@ -6,7 +6,83 @@
   <title>Lista de Comidas Típicas</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
   <style>
-    /* Adicione o CSS conforme o código anterior */
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: url('bg.png') no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    .logo-container {
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    .logo-container img {
+      width: 300px; /* Tamanho aumentado */
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 20px;
+    }
+
+    .box {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 25px 30px;
+      margin-bottom: 30px;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    h2 {
+      font-size: 22px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 0;
+      margin-bottom: 0;
+    }
+
+    li {
+      background: #f3f3f3;
+      margin-bottom: 10px;
+      padding: 10px 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    input, button {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      box-sizing: border-box; /* Garante que padding/border não aumentem largura */
+    }
+
+    input {
+      background-color: #fff;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
   </style>
 </head>
 <body onload="carregarComidas()">
@@ -35,7 +111,7 @@
   </div>
 
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbyLm9Ce0Zvv4tyHE_ebkek9CU4EXwEcvWQX4nKYpdkQnn2tjcR9DG1_JdzKW-eYN16D/exec"; // Substitua com o URL do seu Apps Script
+    const API_URL = "https://script.google.com/macros/s/AKfycbyLm9Ce0Zvv4tyHE_ebkek9CU4EXwEcvWQX4nKYpdkQnn2tjcR9DG1_JdzKW-eYN16D/exec";
 
     async function carregarComidas() {
       const lista = document.getElementById('lista-comidas');
@@ -76,11 +152,10 @@
         await fetch(API_URL, {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
+            'Content-Type': 'application/json'
           },
-          body: new URLSearchParams({
-            nome: nome,
-            comida: comida
+          body: JSON.stringify({
+            data: [{ nome, comida }]
           })
         });
 
