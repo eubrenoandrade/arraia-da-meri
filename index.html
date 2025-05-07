@@ -3,128 +3,96 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Comidas da Festa Junina</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <title>Festa Junina - Comidas Típicas</title>
   <style>
     body {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       background: url('bg.png') no-repeat center center fixed;
       background-size: cover;
+      margin: 0;
+      padding: 0;
       color: #333;
     }
-
     header {
       text-align: center;
-      padding: 2rem;
+      padding: 30px 10px 20px;
+      background-color: rgba(255,255,255,0.9);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
-
     header img {
-      max-width: 250px;
+      max-width: 300px;
     }
-
     .container {
-      max-width: 600px;
-      margin: 0 auto;
-      background: white;
+      max-width: 500px;
+      margin: 30px auto;
+      background-color: white;
       border-radius: 20px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-      padding: 2rem;
-      margin-bottom: 2rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      padding: 30px;
     }
-
-    h2 {
-      margin-top: 0;
-      text-align: center;
-    }
-
-    input[type="text"] {
+    input, button {
       width: 100%;
-      padding: 0.8rem;
-      margin-bottom: 1rem;
+      padding: 12px;
+      margin: 10px 0;
       border: none;
-      border-radius: 12px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-      font-size: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      font-size: 16px;
     }
-
     button {
-      width: 100%;
-      padding: 0.8rem;
-      background-color: #ff8800;
+      background-color: #ff6600;
       color: white;
-      border: none;
-      border-radius: 12px;
-      font-size: 1rem;
-      font-weight: 600;
       cursor: pointer;
-      transition: background 0.3s ease;
+      transition: background-color 0.3s ease;
     }
-
     button:hover {
-      background-color: #e37100;
+      background-color: #e65c00;
     }
-
     ul {
       list-style: none;
       padding: 0;
     }
-
-    li {
-      padding: 0.5rem 0;
-      border-bottom: 1px solid #eee;
+    ul li {
+      background-color: #fff;
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
-
-    .lista-comidas {
-      margin-bottom: 2rem;
+    .message {
+      text-align: center;
+      padding: 10px;
+      margin-top: 15px;
     }
   </style>
 </head>
 <body>
-
   <header>
-    <img src="top-logo.png" alt="Logo da Festa">
+    <img src="top-logo.png" alt="Logo da Festa Junina">
   </header>
-
-  <div class="container lista-comidas">
-    <h2>Comidas já confirmadas:</h2>
-    <ul id="lista-comidas"></ul>
-  </div>
-
   <div class="container">
-    <h2>Confirme o que você vai levar</h2>
-    <input type="text" id="nome" placeholder="Seu nome" required>
-    <input type="text" id="comida" placeholder="Comida típica" required>
+    <h2>Comidas que serão levadas:</h2>
+    <ul id="lista-comidas"></ul>
+
+    <h3>Adicione a sua:</h3>
+    <input type="text" id="nome" placeholder="Seu nome">
+    <input type="text" id="comida" placeholder="Comida típica que vai levar">
     <button onclick="enviarComida()">Enviar</button>
+
+    <div class="message" id="mensagem"></div>
   </div>
 
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycby7Kxrf9qKAafe5G-Gbva6I9NeZyMyuaqqUm9Ajmy38tgIivJP9EE-F5-P7awrsm7O0gg/exec"; // "https://script.google.com/macros/s/AKfycby7Kxrf9qKAafe5G-Gbva6I9NeZyMyuaqqUm9Ajmy38tgIivJP9EE-F5-P7awrsm7O0gg/exec";
-
-    async function carregarComidas() {
-      try {
-        const resposta = await fetch(API_URL);
-        const dados = await resposta.json();
-
-        const lista = document.getElementById("lista-comidas");
-        lista.innerHTML = "";
-
-        dados.forEach(item => {
-          const li = document.createElement("li");
-          li.textContent = `${item.nome} vai levar ${item.comida}`;
-          lista.appendChild(li);
-        });
-      } catch (erro) {
-        console.error("Erro ao carregar comidas:", erro);
-      }
-    }
+    const API_URL = "https://script.google.com/macros/s/AKfycby7Kxrf9qKAafe5G-Gbva6I9NeZyMyuaqqUm9Ajmy38tgIivJP9EE-F5-P7awrsm7O0gg/exec";
 
     async function enviarComida() {
       const nome = document.getElementById("nome").value.trim();
       const comida = document.getElementById("comida").value.trim();
+      const mensagem = document.getElementById("mensagem");
 
       if (!nome || !comida) {
-        alert("Por favor, preencha todos os campos.");
+        mensagem.innerText = "Preencha todos os campos.";
+        mensagem.style.color = "red";
         return;
       }
 
@@ -133,22 +101,46 @@
       dados.append("comida", comida);
 
       try {
-        await fetch(API_URL, {
+        const resposta = await fetch(API_URL, {
           method: "POST",
-          body: dados,
+          body: dados
         });
-        document.getElementById("nome").value = "";
-        document.getElementById("comida").value = "";
-        await carregarComidas();
-        alert('Obrigado! Sua comida foi cadastrada com sucesso.');
+
+        const texto = await resposta.text();
+
+        if (resposta.ok) {
+          mensagem.innerText = "Comida registrada com sucesso!";
+          mensagem.style.color = "green";
+          document.getElementById("nome").value = "";
+          document.getElementById("comida").value = "";
+          carregarComidas();
+        } else {
+          mensagem.innerText = "Erro ao enviar: " + texto;
+          mensagem.style.color = "red";
+        }
       } catch (erro) {
-        console.error("Erro ao enviar:", erro);
+        mensagem.innerText = "Erro de conexão: " + erro.message;
+        mensagem.style.color = "red";
       }
     }
 
-    // Carregar lista ao abrir a página
+    async function carregarComidas() {
+      try {
+        const resposta = await fetch(API_URL);
+        const lista = await resposta.json();
+        const ul = document.getElementById("lista-comidas");
+        ul.innerHTML = "";
+        lista.forEach(item => {
+          const li = document.createElement("li");
+          li.textContent = `${item.nome} — ${item.comida}`;
+          ul.appendChild(li);
+        });
+      } catch (erro) {
+        console.error("Erro ao carregar lista:", erro);
+      }
+    }
+
     window.onload = carregarComidas;
   </script>
-
 </body>
 </html>
