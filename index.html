@@ -84,6 +84,65 @@
     button:hover {
       background-color: #45a049;
     }
+
+    /* Popup */
+    #popup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(5px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    #popup .popup-content {
+      position: relative;
+      animation: fadeZoomIn 0.4s ease-out;
+    }
+
+    #popup img {
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      max-width: 300px;
+      width: 90vw;
+    }
+
+    #popup button.close-btn {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      background: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      font-size: 20px;
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+
+    @keyframes fadeZoomIn {
+      0% {
+        transform: scale(0.8);
+        opacity: 0;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
   </style>
 </head>
 <body onload="carregarComidas()">
@@ -92,7 +151,7 @@
   </div>
 
   <div class="container">
-    <!-- Listagem -->
+    <!-- Lista de comidas -->
     <div class="box">
       <h2>Comidas que cada pessoa levará</h2>
       <ul id="lista-comidas">
@@ -111,36 +170,11 @@
     </div>
   </div>
 
-  <!-- Popup de confirmação -->
-  <div id="popup" style="
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0,0,0,0.4);
-    backdrop-filter: blur(5px);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-  ">
-    <div style="position: relative;">
-      <img src="save.png" alt="Confirmação" style="border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); max-width: 300px; width: 90vw;" />
-      <button onclick="fecharPopup()" style="
-        position: absolute;
-        top: -10px;
-        right: -10px;
-        background: #fff;
-        border: none;
-        border-radius: 50%;
-        width: 30px;
-        height: 30px;
-        cursor: pointer;
-        font-size: 18px;
-        font-weight: bold;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-      ">×</button>
+  <!-- Popup -->
+  <div id="popup">
+    <div class="popup-content">
+      <img src="save.png" alt="Confirmação" />
+      <button class="close-btn" onclick="fecharPopup()">×</button>
     </div>
   </div>
 
@@ -194,21 +228,31 @@
           })
         });
 
-        document.getElementById("formulario").reset();
+        document.getElementById('formulario').reset();
         carregarComidas();
-
-        // Mostra o popup
-        document.getElementById("popup").style.display = "flex";
+        mostrarPopup();
       } catch (err) {
         alert("Erro ao enviar. Tente novamente.");
       }
     });
 
-    function fecharPopup() {
-      document.getElementById("popup").style.display = "none";
+    function mostrarPopup() {
+      const popup = document.getElementById("popup");
+      popup.style.display = "flex";
+      setTimeout(() => {
+        popup.style.opacity = "1";
+      }, 10);
     }
 
-    setInterval(carregarComidas, 60000);
+    function fecharPopup() {
+      const popup = document.getElementById("popup");
+      popup.style.opacity = "0";
+      setTimeout(() => {
+        popup.style.display = "none";
+      }, 300);
+    }
+
+    setInterval(carregarComidas, 10000);
   </script>
 </body>
 </html>
