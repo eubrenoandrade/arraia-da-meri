@@ -12,6 +12,11 @@
       font-family: 'Inter', sans-serif;
       background: url('bg.png') no-repeat center center fixed;
       background-size: cover;
+      transition: filter 0.3s ease;
+    }
+
+    .blurred {
+      filter: blur(6px);
     }
 
     .logo-container {
@@ -20,7 +25,7 @@
     }
 
     .logo-container img {
-      width: 300px; /* Tamanho aumentado */
+      width: 300px;
     }
 
     .container {
@@ -66,7 +71,7 @@
       border: none;
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      box-sizing: border-box; /* Garante que padding/border não aumentem largura */
+      box-sizing: border-box;
     }
 
     input {
@@ -84,35 +89,57 @@
     button:hover {
       background-color: #45a049;
     }
+
+    /* Popup */
+    #popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: none;
+      z-index: 9999;
+    }
+
+    #popup img {
+      width: 250px;
+      border-radius: 16px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    }
   </style>
 </head>
 <body onload="carregarComidas()">
-  <div class="logo-container">
-    <img src="top-logo.png" alt="Logo do Evento">
+  <div id="main-content">
+    <div class="logo-container">
+      <img src="top-logo.png" alt="Logo do Evento">
+    </div>
+
+    <div class="container">
+      <!-- Listagem -->
+      <div class="box">
+        <h2>Comidas que cada pessoa levará</h2>
+        <ul id="lista-comidas">
+          <li>Carregando...</li>
+        </ul>
+      </div>
+
+      <!-- Formulário -->
+      <div class="box">
+        <h2>Coloque seu nome + a comida típica que irá levar para a festa</h2>
+        <form id="formulario">
+          <input type="text" id="nome" name="nome" placeholder="Seu nome" required />
+          <input type="text" id="comida" name="comida" placeholder="Comida típica que irá levar" required />
+          <button type="submit">Enviar</button>
+        </form>
+      </div>
+    </div>
   </div>
 
-  <div class="container">
-    <!-- Listagem -->
-    <div class="box">
-      <h2>Comidas que cada pessoa levará</h2>
-      <ul id="lista-comidas">
-        <li>Carregando...</li>
-      </ul>
-    </div>
-
-    <!-- Formulário -->
-    <div class="box">
-      <h2>Coloque seu nome + a comida típica que irá levar para a festa</h2>
-      <form id="formulario">
-        <input type="text" id="nome" name="nome" placeholder="Seu nome" required />
-        <input type="text" id="comida" name="comida" placeholder="Comida típica que irá levar" required />
-        <button type="submit">Enviar</button>
-      </form>
-    </div>
+  <!-- Popup -->
+  <div id="popup">
+    <img src="save.png" alt="Confirmado!">
   </div>
 
   <script>
-    // Substitua com o URL do seu Apps Script
     const API_URL = "https://script.google.com/macros/s/AKfycbyLm9Ce0Zvv4tyHE_ebkek9CU4EXwEcvWQX4nKYpdkQnn2tjcR9DG1_JdzKW-eYN16D/exec";
 
     async function carregarComidas() {
@@ -162,15 +189,27 @@
           })
         });
 
-        alert("Comida enviada com sucesso!");
         document.getElementById('formulario').reset();
         carregarComidas();
+        mostrarPopup();
       } catch (err) {
         alert("Erro ao enviar. Tente novamente.");
       }
     });
 
-    // Recarrega automaticamente a lista a cada 10 segundos
+    function mostrarPopup() {
+      const popup = document.getElementById('popup');
+      const main = document.getElementById('main-content');
+
+      main.classList.add('blurred');
+      popup.style.display = 'block';
+
+      setTimeout(() => {
+        popup.style.display = 'none';
+        main.classList.remove('blurred');
+      }, 2500); // Esconde após 2.5s
+    }
+
     setInterval(carregarComidas, 10000);
   </script>
 </body>
