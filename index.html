@@ -12,11 +12,6 @@
       font-family: 'Inter', sans-serif;
       background: url('bg.png') no-repeat center center fixed;
       background-size: cover;
-      transition: filter 0.3s ease;
-    }
-
-    .blurred {
-      filter: blur(6px);
     }
 
     .logo-container {
@@ -89,56 +84,64 @@
     button:hover {
       background-color: #45a049;
     }
-
-    /* Popup */
-    #popup {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      display: none;
-      z-index: 9999;
-    }
-
-    #popup img {
-      width: 100%;
-      max-width: 400px;
-      height: auto;
-      border-radius: 16px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-    }
   </style>
 </head>
 <body onload="carregarComidas()">
-  <div id="main-content">
-    <div class="logo-container">
-      <img src="top-logo.png" alt="Logo do Evento">
+  <div class="logo-container">
+    <img src="top-logo.png" alt="Logo do Evento">
+  </div>
+
+  <div class="container">
+    <!-- Listagem -->
+    <div class="box">
+      <h2>Comidas que cada pessoa levará</h2>
+      <ul id="lista-comidas">
+        <li>Carregando...</li>
+      </ul>
     </div>
 
-    <div class="container">
-      <!-- Listagem -->
-      <div class="box">
-        <h2>Comidas que cada pessoa levará</h2>
-        <ul id="lista-comidas">
-          <li>Carregando...</li>
-        </ul>
-      </div>
-
-      <!-- Formulário -->
-      <div class="box">
-        <h2>Coloque seu nome + a comida típica que irá levar para a festa</h2>
-        <form id="formulario">
-          <input type="text" id="nome" name="nome" placeholder="Seu nome" required />
-          <input type="text" id="comida" name="comida" placeholder="Comida típica que irá levar" required />
-          <button type="submit">Enviar</button>
-        </form>
-      </div>
+    <!-- Formulário -->
+    <div class="box">
+      <h2>Coloque seu nome + a comida típica que irá levar para a festa</h2>
+      <form id="formulario">
+        <input type="text" id="nome" name="nome" placeholder="Seu nome" required />
+        <input type="text" id="comida" name="comida" placeholder="Comida típica que irá levar" required />
+        <button type="submit">Enviar</button>
+      </form>
     </div>
   </div>
 
-  <!-- Popup -->
-  <div id="popup">
-    <img src="save.png" alt="Confirmado!">
+  <!-- Popup de confirmação -->
+  <div id="popup" style="
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(5px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  ">
+    <div style="position: relative;">
+      <img src="save.png" alt="Confirmação" style="border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); max-width: 300px; width: 90vw;" />
+      <button onclick="fecharPopup()" style="
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        background: #fff;
+        border: none;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+        font-size: 18px;
+        font-weight: bold;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      ">×</button>
+    </div>
   </div>
 
   <script>
@@ -191,25 +194,18 @@
           })
         });
 
-        document.getElementById('formulario').reset();
+        document.getElementById("formulario").reset();
         carregarComidas();
-        mostrarPopup();
+
+        // Mostra o popup
+        document.getElementById("popup").style.display = "flex";
       } catch (err) {
         alert("Erro ao enviar. Tente novamente.");
       }
     });
 
-    function mostrarPopup() {
-      const popup = document.getElementById('popup');
-      const main = document.getElementById('main-content');
-
-      main.classList.add('blurred');
-      popup.style.display = 'block';
-
-      setTimeout(() => {
-        popup.style.display = 'none';
-        main.classList.remove('blurred');
-      }, 2500); // Esconde após 2.5s
+    function fecharPopup() {
+      document.getElementById("popup").style.display = "none";
     }
 
     setInterval(carregarComidas, 60000);
