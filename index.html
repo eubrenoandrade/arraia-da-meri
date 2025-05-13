@@ -210,18 +210,37 @@
           comidasJaEscolhidas.push(item.comida);
         });
 
-        // Atualiza o select, removendo comidas já escolhidas
-        select.innerHTML = '<option value="">Selecione uma comida</option>';
-        let contador = 1;
-        opcoesTodas.forEach(opcao => {
-          const jaEscolhida = comidasJaEscolhidas.includes(opcao);
-          if (!jaEscolhida) {
-            const option = document.createElement('option');
-            option.value = opcao;
-            option.textContent = `Opção ${contador++} - ${opcao}`;
-            select.appendChild(option);
-          }
-        });
+// Contar quantas vezes cada comida foi escolhida
+const contagemEscolhidas = {};
+comidasJaEscolhidas.forEach(comida => {
+  contagemEscolhidas[comida] = (contagemEscolhidas[comida] || 0) + 1;
+});
+
+// Contar quantas vezes cada comida aparece na lista original
+const contagemOriginais = {};
+opcoesTodas.forEach(comida => {
+  contagemOriginais[comida] = (contagemOriginais[comida] || 0) + 1;
+});
+
+// Gerar opções disponíveis
+select.innerHTML = '<option value="">Selecione uma comida</option>';
+let contador = 1;
+const copiasRestantes = {};
+
+// Copiar a lista original mantendo repetições
+opcoesTodas.forEach(opcao => {
+  const escolhidas = contagemEscolhidas[opcao] || 0;
+  const totalDisponivel = contagemOriginais[opcao];
+  const usadas = copiasRestantes[opcao] || 0;
+
+  if (usadas < totalDisponivel - escolhidas) {
+    const option = document.createElement('option');
+    option.value = opcao;
+    option.textContent = `Opção ${contador++} - ${opcao}`;
+    select.appendChild(option);
+    copiasRestantes[opcao] = usadas + 1;
+  }
+});
 
       } catch (err) {
         lista.innerHTML = '<li>Erro ao carregar dados.</li>';
